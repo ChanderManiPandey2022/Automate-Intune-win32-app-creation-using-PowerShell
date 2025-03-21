@@ -341,7 +341,7 @@ $fileContent = @{
     size          = $Size  # Integer type is acceptable here
     sizeEncrypted = $EncrySize   # Integer type
     isDependency  = $false
-    manifest      = $null     # You may keep this as null if it's allowed by your API call, but you can consider an empty object or array if it's required
+    manifest      = $null     
 }
 
 
