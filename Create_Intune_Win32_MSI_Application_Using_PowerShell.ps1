@@ -22,7 +22,7 @@
 # Creation Date:   3 Mar 2025
 
 # Revision Version 1.2: 24 Mar 2025
-# - Added logic to detect file size. Your MSI file must be 9MB or more.
+# - Added logic to detect file size. Your MSI file size must be 9MB or more.
 # - Added logic to detect file type. If not an MSI file, the script exits.
 
 
