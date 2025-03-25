@@ -25,6 +25,8 @@
 # - Added logic to detect file size. Your MSI file size must be 9MB or more.
 # - Added logic to detect file type. If not an MSI file, the script exits.
 
+# Revision Version 1.3: 26 Mar 2025
+#MsiExecutionContext User or System based on the application. Default will be "System"
 
 # Find the author on:  
 # YouTube:    https://www.youtube.com/@chandermanipandey8763  
@@ -277,7 +279,12 @@ $EncrySize = (Get-Item "$IntuneWinFile").Length
 
 #======================================================================================================================================================================#
 #======================================================================================================================================================================#
-
+# Check if MsiExecutionContext is "any", and if so, set it to "system"
+# If it's not "any", $executionContext will retain its original value (User or System).
+[string]$executionContext = $DetectionXML.ApplicationInfo.MsiInfo.MsiExecutionContext
+if ([string]$executionContext -eq "any") {
+    [string]$executionContext = "system"
+}
 $appDetails = @{
     "@odata.type" = "#microsoft.graph.win32LobApp"
     applicableArchitectures = "x64,x86"  # Changed to a string (Fix for 'StartArray' error)
@@ -292,7 +299,7 @@ $appDetails = @{
     installExperience = @{
         deviceRestartBehavior = "suppress"
         maxRunTimeInMinutes = 60
-        runAsAccount = "$($DetectionXML.ApplicationInfo.MsiInfo.MsiExecutionContext)"
+        runAsAccount = "$executionContext"
     }
     informationUrl = ""
     isFeatured = $false
@@ -330,6 +337,7 @@ Write-Host "$($DetectionXML.ApplicationInfo.name) Application metadata created s
 Write-Host "$($DetectionXML.ApplicationInfo.name) version is $($DetectionXML.ApplicationInfo.MsiInfo.MsiProductVersion)" -ForegroundColor Green  
 Write-Host "$($DetectionXML.ApplicationInfo.name) publisher is $($DetectionXML.ApplicationInfo.MsiInfo.MsiPublisher)" -ForegroundColor Green  
 Write-Host "$($DetectionXML.ApplicationInfo.name) GUID is $($appCreated.id)" -ForegroundColor Green
+Write-Host "$($DetectionXML.ApplicationInfo.name) executionContext is $executionContext" -ForegroundColor Green
 Write-Host "$($DetectionXML.ApplicationInfo.name) custom log location is "C:\Windows\Logs\$($DetectionXML.ApplicationInfo.name)_Install.log"" -ForegroundColor Green
 $uriContentVersion = "https://graph.microsoft.com/beta/deviceAppManagement/mobileApps/$($appCreated.id)/microsoft.graph.win32LobApp/contentVersions"
 $contentVersionCreated = Invoke-MgGraphRequest -Method POST -Uri $uriContentVersion -Body "{}"
