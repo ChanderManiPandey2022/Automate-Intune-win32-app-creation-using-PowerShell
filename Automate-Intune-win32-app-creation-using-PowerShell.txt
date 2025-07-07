@@ -1,0 +1,4 @@
+Script Link
+
+
+https://github.com/ChanderManiPandey2022/Automate-Intune-win32-app-creation-using-PowerShell/releases/download/v1.0.0/Automate-Intune-win32-app-creation-using-PowerShell-main.zip
